@@ -2,7 +2,7 @@
 Universal Machine (UM) Project
 This project implements a Universal Machine (UM), a theoretical computational model designed to execute machine-level programs with a simplified instruction set architecture. The goal of the project is to gain hands-on experience in low-level programming, computer architecture, and memory management. 
 
-Link to our design file: https://docs.google.com/document/d/1xR0dicEuOe9QmYkQ4xQAl-VLisdsermEcx4IJq1iH2k/edit?usp=sharing 
+Link to our design file: https://docs.google.com/document/d/1V-B_2R1iw5aOMl6bHcPUVWTHrf-VPLCK85oPwMdlHoI/edit?usp=sharing
 
 Project Overview
 Our implementation focuses on:
