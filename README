@@ -1,0 +1,140 @@
+Lauren Langbort (llangb01) and Stephanie Kim (skim68)
+README for UM
+
+ACKNOWLEDGEMENTS:
+Thank you to all the TAs for your feedback, time, and help,
+specifically Zane, Lexi, Rohun, Sruthi, Kenny, Alan, Tina, Alec, 
+Matt, and Ayda.
+Y'all are just too smart. 
+
+IMPLEMENTATION CORRECTNESS:
+To our best knowledge, all our modules have been implemented correctly. 
+We unit-tested our instruction tests to make sure the operations were correct
+as well as ran architecture tests to ensure that our representations of 
+registers and memory were being implemented correctly. We also ran our
+UM implementation on the given CS40 .um binary files and diff-ed tests with 
+outputs against the CS40 um reference to make sure our program ran 
+correctly. 
+
+SIGNIFICANT DESIGN DEPARTURES:
+- We decided to keep our instructions into one module 
+instead of splitting it up into 2
+- We also changed our architecture in the sense that 
+instead of having a sequence of C arrays, we have a 
+sequence of structs and each struct contains a C array 
+and the number on elements (or words) in the C array
+
+
+ARCHITECTURE:
+- Um_memory module: creates a new type called Um_memory 
+  and creates getter functions from Hanson sequence 
+  functions to create functions specific to the needs of um_memory  
+    - Secrets: Um_memory is really just a sequence. Each element 
+               of the sequence is a struct of a C array and 
+               integer that is the number of elements in the C array.
+- Um_read module: calls on Um_memory module to create an empty segment 
+  0 to memory, then fill the empty segment 0 with words from a read-in 
+  .um file
+    - Secrets: hides how segment 0 is initialized in our representation 
+               of memory from the driver program 
+- Instructions module: Calls on Um_memory module. Consists of all 
+                       the operations that UM performs and deals with
+                       instances or memory, registers, and recycled ID queue. 
+    - Secrets: hides how registers is implemented and how exactly instructions
+               are implemented from our execution cycle module
+- Execution cycle module: contains the driver function that runs the program. 
+  Calls on um_memory, um_read, and instructions modules. 
+    - Secrets: hides how the drive program is implemented from the client main 
+               (aka the client just wants to run the program, not know how
+               exactly it runs)
+
+
+50 million instructions will take 12553.96878 seconds or 209.23 minutes. 
+We got this by running midmark.um which we found had 30110 words (we took
+the total number of words from stat in our Um_read module and divided it by 4
+because there are 4 bytes in 1 word). Then we timed it using the time command
+and our program ran 7.56 seconds. We get seconds/word by doing 7.56/30110 and
+then multiply it by 50 million to get 12553.96878 seconds. 
+Then we divided it by 60 to get 209.23 minutes. 
+
+UM TESTS:
+halt.um - just tests halt on its own
+
+(expected output) add.um - tests add by loading 2 values and adding them
+
+(expected output) multiply.um - tests multiply by loading 2 values and 
+multiplying them
+
+(expected output) divide.um - tests divide by loading 2 values and dividing them
+
+(expected output) nand.um - tests nand by loading 2 values, nand-ing them, and 
+outputing them
+
+output.um - tests output by loading some values and seeing if the output is
+printing correct values
+
+input.um - tests input by outputing the value that was just inputted
+
+(expected output) verbose.um - used test from lab. Checks to make sure that 
+many instructions can work can work consecutively 
+
+(expected output) sload.um - tests segmented load by loading 3 values 
+and checking that the register is correctly changed
+
+map.um - load 2 values and call map. Did architecture testing on this   
+to make sure memory was being incrememented
+
+unmap.um - load 2 values, called map, then immediately unmapped the new
+segment. Did architecture testing on this to make sure memory size stayed
+the same and the queue of recycles sequences was being incremented
+
+recycle.um - load 2 values, map a new segment, unmap that segment, map a new 
+segment again. Did architecture testing to make sure that we were not 
+mallocing a new segment ID but instead taking from the recycled ID queue
+
+recycle2.um - a more extensive version of recycle.um
+
+sstore.um - tests segmented store by loading 4 values, mapping a new segment,
+and calling sstore function. Did architecture testing to make sure correct 
+words and values were being loaded correctly
+
+(expected output) cmov1.um - tests a successful conditional move by loading 
+3 non zero values, and calling cmov. Register values are expected to change. 
+
+(expected output) cmov2.um - tests unsuccessful conditional move by loading 
+2 non zero values and 1 zero value, and calling cmov. Register values are 
+not expected to change 
+
+loadp1.um - tests load program by loading 2 values, mapping a new segment, 
+loads a 0 value to be modified, then loads the value containing the where 
+the index of the halt instruction in the 0 segement will be,loads two other
+values that are readable when outputed to stdout, uses segmented load and 
+segmented store to put the halt instruction into the mapped segment, calls 
+load program which contains the halt instruction so the test should 
+immediately halt. It should not expect output because the output instructions 
+are loaded after the halt in the mapped segment which is now segment0.
+
+load2.um - tests load program by loading 2 values, mapping a new segment, 
+loads a 0 value to be modified, then loads the value containing the where 
+the index of the halt instruction in the 0 segement will be,loads two other
+values that are readable when outputed to stdout, uses segmented load and 
+segmented store to put the halt instruction into the mapped segment, calls 
+load program which contains the halt instruction so the test should 
+immediately halt. It should not call cmov because the cmov is loaded  
+after the halt in the mapped segment which is now segment0.
+
+many_sstore.um - tests segmented store more extensively with consecutive
+calls to the operation. Loads a couple values to the registers, maps a new
+segments, and calls sstore to change the words in that new segment. 
+
+(expected output) sload2.um - tests segmented load more extensively with 
+multiple calls to the operation. Loads a couple values, maps a new segment, 
+calls ssstore to change the values of that segment. We repeat this a 
+couple of times and we output after every segmented load to check that what
+is store in those registers is what we expected from the values that we loaded
+into the registers
+
+
+Time analyzing the assignment: 5 hours
+Time preparing the design: 10 hours
+Time solving the problems after the design: 30 hours
