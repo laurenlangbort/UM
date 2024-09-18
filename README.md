@@ -8,15 +8,20 @@ Project Overview
 Our implementation focuses on:
 
 Memory Management: We created a custom memory module (Um_memory), which manages memory as a sequence of segments represented by C arrays. It handles mapping, unmapping, and recycling of memory segments.
+
 Instruction Implementation: We implemented the UM’s core set of instructions, such as addition, multiplication, division, conditional moves, and bitwise operations. These instructions interact with memory and registers.
+
 Execution Cycle: The program is driven by an execution cycle that reads instructions from memory, executes them, and manages registers and the program counter.
+
 Key Features
 Modular Design: The project is divided into modules for memory management, instruction handling, and the execution cycle, ensuring clarity and organization.
 Testing: We have thoroughly unit-tested each instruction and run architecture tests to ensure the UM behaves correctly with .um binary files.
+
 Design Decisions
 All instructions were implemented in a single module for simplicity.
 Memory is handled as a sequence of structs containing C arrays, which store the segment data and the number of elements in each array.
 How to Run
+
 Compile the UM using your preferred C compiler.
 Run the UM with a .um binary file as input.
 The program will execute the instructions from the binary file and produce output (if any).
